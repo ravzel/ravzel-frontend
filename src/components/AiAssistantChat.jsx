@@ -179,6 +179,7 @@ export function AiAssistantChat() {
   const [errorInfo, setErrorInfo] = useState(null);
 
   const messagesContainerRef = useRef(null);
+  const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
 
