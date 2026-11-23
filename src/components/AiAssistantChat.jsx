@@ -178,25 +178,25 @@ export function AiAssistantChat() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorInfo, setErrorInfo] = useState(null);
 
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
 
-  // Auto-scroll to latest message
+  // Auto-scroll ONLY the internal chat conversation container when new messages arrive
   useEffect(() => {
-    if (isOpen) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (isOpen && messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
   }, [messages, isLoading, isOpen]);
 
-  // Focus input and smoothly reveal chat panel on mobile
+  // Focus input on open without triggering any unwanted outer page scroll jump
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => {
-        inputRef.current?.focus();
-        if (window.innerWidth < 1024) {
-          chatContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+        inputRef.current?.focus({ preventScroll: true });
       }, 150);
       return () => clearTimeout(timer);
     }
@@ -326,12 +326,12 @@ export function AiAssistantChat() {
       
       {/* ============================================================== */}
       {/* 1. ROBOT MASCOT INTEGRATION (RIGHT SIDE OF HERO)               */}
-      {/* 100% Genuine Transparent PNG — Zero Box, Zero Rectangular Patch*/}
+      {/* Positioned naturally in the direction of Zia's hand gesture    */}
       {/* ============================================================== */}
-      <div className="relative w-full flex flex-col items-center select-none translate-y-0 lg:translate-y-[50px] lg:translate-x-3 xl:translate-x-6">
+      <div className="relative w-full flex flex-col items-center select-none translate-y-0 lg:translate-y-[2px] xl:translate-y-[6px] lg:translate-x-28 xl:translate-x-36">
         
         {/* Soft Natural Purple Ambient Aura behind the mascot */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130px] sm:w-[170px] lg:w-[225px] xl:w-[235px] h-[130px] sm:h-[170px] lg:h-[225px] xl:h-[235px] bg-[#A78BFA]/15 rounded-full blur-[70px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120px] sm:w-[150px] lg:w-[195px] xl:w-[210px] h-[120px] sm:h-[150px] lg:h-[195px] xl:h-[210px] bg-[#A78BFA]/15 rounded-full blur-[65px] pointer-events-none" />
 
         {/* Mascot Wrapper */}
         <div
@@ -347,8 +347,8 @@ export function AiAssistantChat() {
             }
           }}
         >
-          {/* Exact 3D Purple Robot Image (Reduced ~22% in size for refined balance and right positioning) */}
-          <div className="relative w-[104px] sm:w-[136px] md:w-[150px] lg:w-[176px] xl:w-[190px] aspect-[827/735] transition-transform duration-500 group-hover:scale-[1.03] active:scale-[0.98]">
+          {/* Exact 3D Purple Robot Image (Scaled slightly backward for realistic depth and natural spacing from Zia's hand) */}
+          <div className="relative w-[104px] sm:w-[136px] md:w-[145px] lg:w-[155px] xl:w-[165px] aspect-[827/735] transition-transform duration-500 group-hover:scale-[1.03] active:scale-[0.98]">
             <img
               src="/assets/robot-mascot-transparent.png"
               alt="RAVZEL AI Assistant Mascot — Purple 3D Presenter Robot"
@@ -483,7 +483,10 @@ export function AiAssistantChat() {
             </div>
 
             {/* Messages Thread */}
-            <div className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-2.5 w-full scrollbar-thin scrollbar-thumb-[#A78BFA]/20 scrollbar-track-transparent">
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-2.5 w-full scrollbar-thin scrollbar-thumb-[#A78BFA]/20 scrollbar-track-transparent overscroll-contain"
+            >
               {messages.map((msg) => {
                 const isUser = msg.role === 'user';
                 return (
@@ -609,9 +612,14 @@ export function AiAssistantChat() {
                 {SUGGESTED_QUESTIONS.map((q, idx) => (
                   <button
                     key={idx}
-                    onClick={() => handleSendMessage(q)}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleSendMessage(q);
+                    }}
                     disabled={isLoading}
-                    className="shrink-0 px-2.5 py-1 rounded-full bg-[#181818] hover:bg-[#A78BFA]/15 border border-[#D9D9D9]/15 hover:border-[#A78BFA]/50 text-xs text-[#D9D9D9] hover:text-[#F8F6EE] transition-all active:scale-95 text-left disabled:opacity-50 whitespace-nowrap"
+                    className="shrink-0 px-2.5 py-1 rounded-full bg-[#181818] hover:bg-[#A78BFA]/15 border border-[#D9D9D9]/15 hover:border-[#A78BFA]/50 text-xs text-[#D9D9D9] hover:text-[#F8F6EE] transition-all active:scale-95 text-left disabled:opacity-50 whitespace-nowrap cursor-pointer"
                   >
                     {q}
                   </button>
@@ -623,6 +631,7 @@ export function AiAssistantChat() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 handleSendMessage();
               }}
               className="flex items-center gap-2 p-2.5 sm:p-3 w-full bg-[#141414] border-t border-[#D9D9D9]/15 shrink-0"
