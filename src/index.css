@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-charcoal: #0E0E0E;
+    --color-cream: #F8F6EE;
+    --color-purple: #A78BFA;
+    --color-grey: #D9D9D9;
+    --border-hairline: rgba(217, 217, 217, 0.12);
+  }
+
+  body {
+    background-color: #0E0E0E;
+    color: #F8F6EE;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    letter-spacing: -0.01em;
+    overflow-x: hidden;
+  }
+
+  /* Custom subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0E0E0E;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #262626;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3a;
+  }
+}
+
+/* Hairline utility borders */
+.hairline-border {
+  border: 1px solid rgba(217, 217, 217, 0.12);
+}
+.hairline-border-t {
+  border-top: 1px solid rgba(217, 217, 217, 0.12);
+}
+.hairline-border-b {
+  border-bottom: 1px solid rgba(217, 217, 217, 0.12);
+}
+.hairline-border-l {
+  border-left: 1px solid rgba(217, 217, 217, 0.12);
+}
+.hairline-border-r {
+  border-right: 1px solid rgba(217, 217, 217, 0.12);
+}
+
+/* Swiss Architectural Architectural Grid Overlay - Subtle & Precision-engineered */
+.architectural-grid {
+  background-size: 64px 64px;
+  background-image: 
+    linear-gradient(to right, rgba(217, 217, 217, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(217, 217, 217, 0.03) 1px, transparent 1px);
+}
+
+.architectural-dots {
+  background-image: radial-gradient(rgba(217, 217, 217, 0.1) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Tactile button transition */
+.btn-tactile {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-tactile:hover {
+  transform: translateY(-1px);
+}
+.btn-tactile:active {
+  transform: translateY(1px);
+}
+
+/* Card hover micro-interaction */
+.card-tactile {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(217, 217, 217, 0.12);
+}
+.card-tactile:hover {
+  border-color: rgba(167, 139, 250, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Focus styles for keyboard accessibility */
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #A78BFA;
+  outline-offset: 2px;
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
