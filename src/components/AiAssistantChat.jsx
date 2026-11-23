@@ -257,8 +257,10 @@ export function AiAssistantChat() {
       }));
 
     try {
-      const apiBase = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ? import.meta.env.VITE_API_URL.replace(/\/$/, '') : '';
-    const response = await fetch(`${apiBase}/api/ai-assistant/chat`, {
+      const apiBase = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+        ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
+        : 'https://ravzel-backend.onrender.com';
+      const response = await fetch(`${apiBase}/api/ai-assistant/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
